@@ -1,4 +1,7 @@
+import 'package:app_cartfy/src/pages/contacts/contactsFriends.dart';
 import 'package:app_cartfy/src/pages/home/home.dart';
+import 'package:app_cartfy/src/pages/home/homeTest.dart';
+import 'package:app_cartfy/src/pages/show-lists/creatingList.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget{
@@ -8,8 +11,10 @@ class App extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Titulo MyApp",
+      theme: ThemeData.light(useMaterial3: true,),
+      darkTheme: ThemeData.dark(),
       home: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           appBar: AppBar(
             bottom: const TabBar(
@@ -24,9 +29,9 @@ class App extends StatelessWidget{
           body: const TabBarView(
             children: [
               Home(),
-              Icon(Icons.home),
-              Icon(Icons.cabin),
-              Icon(Icons.cabin)
+              TelaInicialWidget(),
+              CreatingListWidget(),
+              FriendsListWidget()
             ]),
         ),
       ),
