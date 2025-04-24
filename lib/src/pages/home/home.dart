@@ -1,79 +1,90 @@
-import 'package:app_cartfy/src/components/searchProductComponent.dart';
-import 'package:app_cartfy/src/components/showProductResultDialog.dart';
-import 'package:app_cartfy/src/models/productApp/productApp.dart';
-import 'package:app_cartfy/src/pages/makingProductList.dart';
-import 'package:app_cartfy/src/services/productService.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:app_cartfy/src/app.dart';
+import 'package:app_cartfy/src/pages/login-register/login_register.dart';
 
 
-
-
-class Home extends StatefulWidget{
+class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _HomeState();
-  }
-
-}
-
-class _HomeState extends State<Home>{
-  final TextEditingController textController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final  List<String> _produtos = <String>[];
-
-  final ProductService productService = GetIt.I<ProductService>();
-
-  // final _barcodeScanner = BarcodeScanner();
-  @override
-  Widget build(BuildContext context) {      
-
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Cartfy")),
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(        
-          children: <Widget>[
-            SearchProductComponent(
-              onSearchByDescription: (String description) async {              
-              // Navigator.pop(context);
-              ProductApp productApp = await productService.getByBarcode(7892840819170);              
-              print("Teste");
-              showDialog(context: context,
-                 builder: (BuildContext context) => ShowProductResult(product: productApp),
-                 barrierDismissible: false); //TesteDialog()
-                //  builder: (BuildContext context) => ShowProductResultDialog(productApp: productApp,)); //TesteDialog()
-                                 
-              }, 
-              // onSearchByBarcode: (String barcode) {
-              
-              // }, 
-              onBarcodeFound: (ProductApp ) {  },
-            ),     
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MakingProductList()));
-              }, 
-              child: const Text("Nova Lista"),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF4CAF50), Color.fromARGB(255, 129, 199, 199)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 400,
+                  height: 400,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Color(0xFFC0C0C0),
+                      width: 15,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 25,
+                        offset: Offset(0, 12),
+                      ),
+                    ],
+                  ),
+                ),
+                Image.asset(
+                  'imgs/carrinho.png',
+                  width: 340,
+                  height: 340,
+                  fit: BoxFit.contain,
+                ),
+              ],
             ),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index){                  
-                  return Card(
-                    child: ListTile(
-                      title: Text(_produtos[index]),
-                    )
-                  );
-                },
-              itemCount: _produtos.length,
-              )
-            )
-          ]
+            const SizedBox(height: 30),
+            Text(
+              'Curta suas compras!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 45,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: const Color.fromARGB(255, 93, 0, 255),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 15),
+              ),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginCadastro()),
+                );
+              },
+              child: const Text(
+                'Iniciar',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
