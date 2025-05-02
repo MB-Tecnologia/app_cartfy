@@ -74,9 +74,40 @@ class Home extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginCadastro()),
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => const LoginCadastro(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.fastLinearToSlowEaseIn;
+
+                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+
+                      // Animação para a tela antiga (fade out)
+                      var fadeOutAnimation = secondaryAnimation.drive(
+                        CurveTween(curve: Curves.easeOut),
+                      );
+
+                      return Stack(
+                        children: [
+                          FadeTransition(
+                            opacity: fadeOutAnimation, // Tela antiga vai sumindo
+                            child: child,
+                          ),
+                          SlideTransition(
+                            position: offsetAnimation, // Tela nova deslizando
+                            child: child,
+                          ),
+                        ],
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 2000),
+                  ),
                 );
               },
+
+
               child: const Text(
                 'Iniciar',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

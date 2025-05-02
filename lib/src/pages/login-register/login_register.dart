@@ -97,10 +97,37 @@ class LoginCadastro extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   onPressed: () {
-                    print("clicado");
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const CadastroUsuario()),
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) => const CadastroUsuario(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.fastLinearToSlowEaseIn;
+
+                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          var fadeOutAnimation = secondaryAnimation.drive(
+                            CurveTween(curve: Curves.easeOut),
+                          );
+
+                          return Stack(
+                            children: [
+                              FadeTransition(
+                                opacity: fadeOutAnimation,
+                                child: child,
+                              ),
+                              SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              ),
+                            ],
+                          );
+                        },
+                        transitionDuration: const Duration(milliseconds: 700),
+                      ),
                     );
                   },
                   icon: const Icon(Icons.email),
